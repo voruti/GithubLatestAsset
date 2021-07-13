@@ -1,0 +1,19 @@
+{
+  "name": "githublatestasset",
+  "version": "1.0.0",
+  "description": "Get the latest asset of a GitHub release by regex",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voruti/GithubLatestAsset.git"
+  },
+  "author": "voruti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/voruti/GithubLatestAsset/issues"
+  },
+  "homepage": "https://github.com/voruti/GithubLatestAsset#readme"
+}
