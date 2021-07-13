@@ -8,23 +8,13 @@ server.on('request', async (request, response) => {
         const githubCom = 'https://github.com';
         const githubApiHostname = 'api.github.com';
 
-        let pathArray = request.url.split('/');
+        const pathArray = request.url.split('/');
 
         const fileRegex = pathArray[pathArray.length - 1];
-        // pathArray[pathArray.length - 1] = null;
 
         const repo = pathArray[1] + '/' + pathArray[2];
-        // pathArray[1] = null;
-        // pathArray[2] = null;
 
-        // pathArray = pathArray.filter((element) => element);
-
-        // https://docs.github.com/en/rest/reference/repos#get-the-latest-release
-        // const apiPathArray = pathArray.filter((element) => element !== 'download');
-        // const apiPath = apiPathArray.join('/');
         const apiPath = 'releases/latest';
-
-        // const path = pathArray.join('/');
         const path = 'releases/latest/download';
 
         const apiOptions = {
