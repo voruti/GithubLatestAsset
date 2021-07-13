@@ -5,4 +5,4 @@ WORKDIR /home/node/app
 
 COPY ./ ./
 
-CMD [ "npm", "start" ]
+CMD [ "node", "index.js" ]
