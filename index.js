@@ -4,69 +4,82 @@ const https = require('https');
 
 const server = http.createServer();
 server.on('request', async (request, response) => {
-    const githubCom = 'https://github.com';
-    // const githubApi = 'https://api.github.com/repos';
-    const githubApiHostname = 'api.github.com';
+    try {
+        const githubCom = 'https://github.com';
+        const githubApiHostname = 'api.github.com';
 
-    let pathArray = request.url.split('/');
+        let pathArray = request.url.split('/');
 
-    const fileRegex = pathArray[pathArray.length - 1];
-    pathArray[pathArray.length - 1] = null;
+        const fileRegex = pathArray[pathArray.length - 1];
+        // pathArray[pathArray.length - 1] = null;
 
-    const repo = pathArray[1] + '/' + pathArray[2];
-    pathArray[1] = null;
-    pathArray[2] = null;
+        const repo = pathArray[1] + '/' + pathArray[2];
+        // pathArray[1] = null;
+        // pathArray[2] = null;
 
-    // pathArray = pathArray.filter((element) => element);
+        // pathArray = pathArray.filter((element) => element);
 
-    // const apiPathArray = pathArray.filter((element) => element !== 'download');
-    // const apiPath = apiPathArray.join('/');
-    const apiPath = 'releases/latest';
+        // https://docs.github.com/en/rest/reference/repos#get-the-latest-release
+        // const apiPathArray = pathArray.filter((element) => element !== 'download');
+        // const apiPath = apiPathArray.join('/');
+        const apiPath = 'releases/latest';
 
-    // const path = pathArray.join('/');
-    const path = 'releases/latest/download';
+        // const path = pathArray.join('/');
+        const path = 'releases/latest/download';
 
-    const apiOptions = {
-        hostname: githubApiHostname,
-        path: ['', 'repos', repo, apiPath].join('/'),
-        headers: {
-            'User-Agent': 'Mozilla/5.0'
-        }
-    };
-    console.log(apiOptions);
-    https.get(apiOptions, (apiResponse) => {
-        let body = '';
-
-        apiResponse.on('data', (chunk) => {
-            body += chunk;
-        });
-
-        apiResponse.on('end', () => {
+        const apiOptions = {
+            hostname: githubApiHostname,
+            path: ['', 'repos', repo, apiPath].join('/'),
+            headers: {
+                'User-Agent': 'Mozilla/5.0'
+            }
+        };
+        https.get(apiOptions, (apiResponse) => {
             try {
-                let json = JSON.parse(body);
-                console.log(
-                    json.assets
-                        .map((asset) => asset.name)
-                        .filter((fileName) => fileName.match(fileRegex))
-                );
+                let body = '';
 
-                const file = json.assets
-                    .map((asset) => asset.name)
-                    .filter((fileName) => fileName.match(fileRegex))
-                [0];
+                apiResponse.on('data', (chunk) => {
+                    try {
+                        body += chunk;
+                    } catch (error) {
+                        console.error(error);
+                        response.setHeader("Content-Type", "text/html");
+                        response.end(error);
+                    };
+                });
 
-                console.log(githubCom, repo, path, file);
+                apiResponse.on('end', () => {
+                    try {
+                        let json = JSON.parse(body);
+
+                        const file = json.assets
+                            .map((asset) => asset.name)
+                            .filter((fileName) => fileName.match(fileRegex))
+                        [0];
+                        if (!file) {
+                            throw 'File not found!';
+                        }
 
 
-                response.writeHead(302, { 'location': [githubCom, repo, path, file].join('/') });
-                response.end();
+                        response.writeHead(302, { 'location': [githubCom, repo, path, file].join('/') });
+                        response.end();
+                    } catch (error) {
+                        console.error(error);
+                        response.setHeader("Content-Type", "text/html");
+                        response.end(error);
+                    };
+                });
             } catch (error) {
-                console.error(error.message);
+                console.error(error);
+                response.setHeader("Content-Type", "text/html");
+                response.end(error);
             };
         });
-        // }).on('error', (error) => {
-        //     console.error(error.message);
-    });
+    } catch (error) {
+        console.error(error);
+        response.setHeader("Content-Type", "text/html");
+        response.end(error);
+    };
 });
 
 server.listen(8099);
