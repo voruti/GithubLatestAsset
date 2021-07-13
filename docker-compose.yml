@@ -1,0 +1,6 @@
+version: "3"
+services:
+  githublatestasset:
+    build: .
+    ports:
+      - 8099:8099
