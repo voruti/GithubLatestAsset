@@ -1,8 +1,8 @@
-const http = require('http');
-const https = require('https');
+import { createServer } from 'http';
+import { get } from 'https';
 
 
-const server = http.createServer();
+const server = createServer();
 server.on('request', async (request, response) => {
     try {
         const githubCom = 'https://github.com';
@@ -24,7 +24,7 @@ server.on('request', async (request, response) => {
                 'User-Agent': 'Mozilla/5.0'
             }
         };
-        https.get(apiOptions, (apiResponse) => {
+        get(apiOptions, (apiResponse) => {
             try {
                 let body = '';
 
