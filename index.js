@@ -34,7 +34,7 @@ server.on('request', async (request, response) => {
                     } catch (error) {
                         console.error(error);
                         response.setHeader("Content-Type", "text/html");
-                        response.end(error);
+                        response.end("Error");
                     };
                 });
 
@@ -56,19 +56,19 @@ server.on('request', async (request, response) => {
                     } catch (error) {
                         console.error(error);
                         response.setHeader("Content-Type", "text/html");
-                        response.end(error);
+                        response.end("Error");
                     };
                 });
             } catch (error) {
                 console.error(error);
                 response.setHeader("Content-Type", "text/html");
-                response.end(error);
+                response.end("Error");
             };
         });
     } catch (error) {
         console.error(error);
         response.setHeader("Content-Type", "text/html");
-        response.end(error);
+        response.end("Error");
     };
 });
 
