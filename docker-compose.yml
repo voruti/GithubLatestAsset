@@ -2,5 +2,6 @@ version: "3"
 services:
   githublatestasset:
     build: .
+    restart: always
     ports:
       - 8099:8099
